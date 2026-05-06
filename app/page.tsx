@@ -89,9 +89,14 @@ export default function BuddyHome() {
             </Link>
           </div>
           {sessions.length > 0 && (
-            <p className="mt-3 text-[11px] text-slate-400">
-              これまでの おしゃべり: {sessions.length} かい
-            </p>
+            <div className="mt-3 flex items-center justify-between">
+              <p className="text-[11px] text-slate-400">
+                これまでの おしゃべり: {sessions.length} かい
+              </p>
+              <Link href="/memo" className="text-[11px] text-rose-400 underline">
+                メモをみる →
+              </Link>
+            </div>
           )}
         </div>
       </div>
