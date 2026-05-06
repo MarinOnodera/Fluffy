@@ -7,7 +7,7 @@ export const BUDDY_CHARACTERS: BuddyCharacter[] = [
   {
     id: "momo",
     name: "モモ",
-    imageSrc: "/buddy/buddy-1.png",
+    imageSrc: "/buddy-1.png.jpg",
     vibe: "ピンク色の小さなまんまる。やさしく、きみの話をたっぷり聞いてくれる。",
     accent: "#ff8ab8",
     bgClass: "from-pink-100 via-rose-100 to-pink-50",
@@ -19,7 +19,7 @@ export const BUDDY_CHARACTERS: BuddyCharacter[] = [
   {
     id: "sora",
     name: "ソラ",
-    imageSrc: "/buddy/buddy-2.png",
+    imageSrc: "/buddy-2.png.jpg",
     vibe: "水色と紫のふわふわ。少しだけドキドキ屋。きらきらした目で耳をかたむける。",
     accent: "#7aa8ff",
     bgClass: "from-sky-100 via-violet-100 to-pink-50",
@@ -31,7 +31,7 @@ export const BUDDY_CHARACTERS: BuddyCharacter[] = [
   {
     id: "peche",
     name: "ペシュ",
-    imageSrc: "/buddy/buddy-3.png",
+    imageSrc: "/buddy-3.png.jpg",
     vibe: "薄ピンクのまるい子。のんびり屋でおっとり。心の重さを軽くしてくれる。",
     accent: "#ffa6a0",
     bgClass: "from-orange-50 via-pink-100 to-rose-100",
@@ -43,7 +43,7 @@ export const BUDDY_CHARACTERS: BuddyCharacter[] = [
   {
     id: "lumi",
     name: "ルミ",
-    imageSrc: "/buddy/buddy-4.png",
+    imageSrc: "/buddy-4.png.jpg",
     vibe: "ラベンダー色のおおきな目。ちょっぴり物思いがち。気持ちの整理がじょうず。",
     accent: "#a48fff",
     bgClass: "from-purple-100 via-indigo-50 to-rose-50",
@@ -55,7 +55,7 @@ export const BUDDY_CHARACTERS: BuddyCharacter[] = [
   {
     id: "yuki",
     name: "ユキ",
-    imageSrc: "/buddy/buddy-5.png",
+    imageSrc: "/buddy-5.png.jpg",
     vibe: "まっしろもこもこ。あったかくて、抱きしめると安心する。話を急かさない。",
     accent: "#ffd6dc",
     bgClass: "from-white via-rose-50 to-pink-50",
