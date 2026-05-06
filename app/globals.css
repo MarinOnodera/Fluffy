@@ -12,3 +12,30 @@ body {
   0%, 100% { transform: translateY(0) scale(1); }
   50% { transform: translateY(-8px) scale(1.02); }
 }
+
+/* VoiceAvatar body animations */
+@keyframes voice-idle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-7px) scale(1.015); }
+}
+
+@keyframes voice-listen {
+  0%        { transform: rotate(0deg) scale(1.02); }
+  20%       { transform: rotate(-5deg) scale(1.03); }
+  50%       { transform: rotate(0deg) scale(1.02); }
+  80%       { transform: rotate(5deg) scale(1.03); }
+  100%      { transform: rotate(0deg) scale(1.02); }
+}
+
+@keyframes voice-speak {
+  0%, 100% { transform: translateY(0)   scale(1); }
+  25%      { transform: translateY(-10px) scale(1.04); }
+  50%      { transform: translateY(-4px)  scale(1.01); }
+  75%      { transform: translateY(-8px)  scale(1.03); }
+}
+
+/* リスニングドット */
+@keyframes listenDot {
+  0%, 100% { transform: translateY(0);   opacity: 0.5; }
+  50%      { transform: translateY(-6px); opacity: 1; }
+}

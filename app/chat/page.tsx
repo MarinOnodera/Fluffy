@@ -6,6 +6,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useBuddy } from "@/lib/store";
 import { getCharacter } from "@/lib/characters";
 import { FluffyAvatar } from "@/components/FluffyAvatar";
+import { VoiceAvatar } from "@/components/VoiceAvatar";
+import type { VoiceState } from "@/components/VoiceAvatar";
 import type { BuddyMessage, BuddySession } from "@/lib/types";
 
 const SESSION_MSG_SOFT_LIMIT = 60;
@@ -315,57 +317,68 @@ export default function BuddyChatPage() {
         </div>
       </header>
 
-      {/* 声モード: アバター中央表示 */}
-      {voiceMode ? (
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 px-4">
-          <FluffyAvatar
-            character={character}
-            size={180}
-            bouncing={isSpeaking}
-          />
-          <p className="text-slate-600 text-sm text-center">
-            {isListening
-              ? "🎤 はなしてね…"
-              : isSpeaking
-              ? `${character.name} がはなしてるよ`
-              : sending
-              ? "…かんがえちゅう"
-              : "マイクボタンをおして話してね"}
-          </p>
-          {/* 直近のやりとりを小さく表示 */}
-          {messages.length > 0 && (
-            <div className="w-full max-w-sm space-y-2 max-h-40 overflow-y-auto">
-              {messages.slice(-4).map((m) => (
-                <p
-                  key={m.id}
-                  className={`text-xs rounded-2xl px-3 py-2 ${
-                    m.role === "user"
-                      ? "bg-rose-100 text-rose-800 text-right ml-8"
-                      : "bg-white/80 text-slate-700 mr-8"
-                  }`}
-                >
-                  {m.text}
-                </p>
-              ))}
+      {/* 声モード: アバター全面表示 */}
+      {voiceMode ? (() => {
+        const voiceState: VoiceState =
+          isSpeaking ? "speaking" :
+          isListening ? "listening" :
+          "idle";
+        return (
+          <div className="flex-1 flex flex-col items-center justify-between py-6 px-4">
+            {/* キャラクター大きく中央に */}
+            <div className="flex-1 flex flex-col items-center justify-center gap-4">
+              <VoiceAvatar character={character} state={voiceState} size={280} />
+
+              {/* 状態テキスト */}
+              <p className="text-slate-600 text-base font-medium text-center mt-2">
+                {isListening
+                  ? "きいてるよ…"
+                  : isSpeaking
+                  ? `${character.name} がはなしてるよ`
+                  : sending
+                  ? "…かんがえちゅう"
+                  : "マイクボタンをおして話してね"}
+              </p>
+
+              {/* 直近メッセージ (最新2件だけ小さく) */}
+              {messages.length > 0 && (
+                <div className="w-full max-w-xs space-y-1.5 mt-1">
+                  {messages.slice(-2).map((m) => (
+                    <p
+                      key={m.id}
+                      className={`text-xs rounded-2xl px-3 py-2 leading-relaxed ${
+                        m.role === "user"
+                          ? "bg-rose-100 text-rose-800 text-right ml-10"
+                          : "bg-white/80 text-slate-700 mr-10"
+                      }`}
+                    >
+                      {m.text}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-          {/* 大きなマイクボタン */}
-          <button
-            onPointerDown={startListening}
-            onPointerUp={stopListening}
-            onPointerLeave={stopListening}
-            disabled={sending || isSpeaking}
-            className={`w-24 h-24 rounded-full shadow-xl flex items-center justify-center text-4xl transition active:scale-95 disabled:opacity-40 ${
-              isListening
-                ? "bg-red-400 animate-pulse"
-                : "bg-gradient-to-br from-rose-400 to-pink-400"
-            }`}
-          >
-            🎤
-          </button>
-          <p className="text-[11px] text-slate-400">押している間だけ話せるよ</p>
-        </div>
-      ) : (
+
+            {/* マイクボタン — 下部固定 */}
+            <div className="flex flex-col items-center gap-2 pb-2">
+              <button
+                onPointerDown={startListening}
+                onPointerUp={stopListening}
+                onPointerLeave={stopListening}
+                disabled={sending || isSpeaking}
+                className={`w-28 h-28 rounded-full shadow-2xl flex items-center justify-center text-5xl transition active:scale-95 disabled:opacity-40 ${
+                  isListening
+                    ? "bg-red-400 animate-pulse"
+                    : "bg-gradient-to-br from-rose-400 to-pink-400"
+                }`}
+              >
+                🎤
+              </button>
+              <p className="text-xs text-slate-400">押している間だけ話せるよ</p>
+            </div>
+          </div>
+        );
+      })() : (
         /* テキストモード: 従来のチャット表示 */
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-5 mx-auto max-w-md w-full">
           <div className="flex flex-col gap-3">
