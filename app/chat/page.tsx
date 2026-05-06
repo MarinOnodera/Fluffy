@@ -18,8 +18,10 @@ export default function BuddyChatPage() {
   const {
     selectedCharacterId,
     childName,
+    childAge,
     sessions,
     activeSessionId,
+    familyCode,
     startSession,
     endActiveSession,
     appendMessage,
@@ -137,6 +139,7 @@ export default function BuddyChatPage() {
             speechSample: character.speechSample,
           },
           childName: childName || "",
+          childAge: childAge ?? null,
           history: [],
           userText:
             "(システム: これは新しいセッションのスタート。やさしく短くあいさつして、今日の気分や様子を 1 つだけ自然に聞いてあげて。)",
@@ -177,6 +180,7 @@ export default function BuddyChatPage() {
             firstPerson: character.firstPerson, speechSample: character.speechSample,
           },
           childName,
+          childAge: childAge ?? null,
           history,
           userText: text,
         }),
@@ -220,7 +224,7 @@ export default function BuddyChatPage() {
       if (r.ok) {
         const j = (await r.json()) as { summary?: BuddySummaryDto };
         if (j.summary) {
-          setSessionSummary(activeSession.id, {
+          const summaryData = {
             parentNote: j.summary.parentNote,
             mood: j.summary.mood,
             topics: j.summary.topics,
@@ -228,6 +232,21 @@ export default function BuddyChatPage() {
             worries: j.summary.worries,
             flags: j.summary.flags,
             at: j.summary.at,
+          };
+          setSessionSummary(activeSession.id, summaryData);
+          void fetch("/api/family", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              familyCode,
+              session: {
+                id: activeSession.id,
+                characterName: character?.name ?? "",
+                childName,
+                startedAt: activeSession.startedAt,
+                summary: summaryData,
+              },
+            }),
           });
         }
       }

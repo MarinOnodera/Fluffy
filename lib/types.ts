@@ -84,6 +84,9 @@ export interface BuddyState {
   ready: boolean;
   selectedCharacterId: string | null;
   childName: string;
+  childAge: number | null;
+  fontSize: "sm" | "md" | "lg";
+  familyCode: string;
   /** 保護者ダッシュボード PIN (4 桁数字) のハッシュ。未設定なら null。 */
   parentPinHash: string | null;
   sessions: BuddySession[];

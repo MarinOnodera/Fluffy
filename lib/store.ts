@@ -27,6 +27,8 @@ function hashPin(pin: string): string {
 interface Actions {
   selectCharacter: (id: string) => void;
   setChildName: (name: string) => void;
+  setChildAge: (age: number | null) => void;
+  setFontSize: (size: "sm" | "md" | "lg") => void;
   setParentPin: (pin: string) => void;
   verifyParentPin: (pin: string) => boolean;
   startSession: () => string;
@@ -37,10 +39,18 @@ interface Actions {
   resetAll: () => void;
 }
 
+function generateFamilyCode(): string {
+  return Math.random().toString(36).slice(2, 6).toUpperCase() +
+    Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
 const initial: BuddyState = {
   ready: false,
   selectedCharacterId: null,
   childName: "",
+  childAge: null,
+  fontSize: "md",
+  familyCode: generateFamilyCode(),
   parentPinHash: null,
   sessions: [],
   activeSessionId: null,
@@ -54,6 +64,10 @@ export const useBuddy = create<BuddyState & Actions>()(
       selectCharacter: (id) => set({ selectedCharacterId: id, ready: true }),
 
       setChildName: (name) => set({ childName: name.slice(0, 20) }),
+
+      setChildAge: (age) => set({ childAge: age }),
+
+      setFontSize: (size) => set({ fontSize: size }),
 
       setParentPin: (pin) => {
         if (!/^\d{4}$/.test(pin)) return;

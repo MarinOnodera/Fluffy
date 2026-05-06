@@ -80,6 +80,7 @@ interface ReqBody {
     speechSample: string;
   };
   childName: string;
+  childAge?: number | null;
   /** 直近の会話履歴 (古い→新しい順)。本文だけ */
   history: Array<{ role: "user" | "buddy"; text: string }>;
   /** 直近のユーザー発言 */
@@ -107,6 +108,13 @@ export async function POST(req: Request) {
 
   const client = new Anthropic({ apiKey });
 
+  const age = body.childAge ?? null;
+  const ageNote = age === null ? null
+    : age < 6 ? "相手は未就学児。全部ひらがな・カタカナのみ。漢字は一切使わない。超短文（1〜2文）。"
+    : age <= 8 ? "相手は小学校低学年。ひらがな中心、1〜2年生レベルの簡単な漢字のみ。短文。"
+    : age <= 11 ? "相手は小学校高学年。一般的な小学生向けの漢字を使ってよい。"
+    : "相手は中学生以上。通常の日本語でよい。";
+
   const charBlock = [
     `# 今日のキャラクター`,
     `名前: ${body.character.name}`,
@@ -114,7 +122,8 @@ export async function POST(req: Request) {
     `vibe: ${body.character.vibe}`,
     `口調サンプル: ${body.character.speechSample}`,
     body.childName ? `話している子の呼び名: ${body.childName}` : `話している子の呼び名: (まだ聞けてない)`,
-  ].join("\n");
+    ageNote ? `\n# 言葉づかいの注意\n${ageNote}` : "",
+  ].filter(Boolean).join("\n");
 
   const messages: Anthropic.MessageParam[] = [];
   for (const m of (body.history ?? []).slice(-12)) {

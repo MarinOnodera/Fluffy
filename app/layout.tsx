@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { FontSizeProvider } from "@/components/FontSizeProvider";
 
 export const metadata: Metadata = {
   title: "Fluffy — もこもこフレンド",
@@ -20,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <FontSizeProvider>{children}</FontSizeProvider>
+      </body>
     </html>
   );
 }

@@ -10,9 +10,10 @@ export default function BuddyHome() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
-  const { selectedCharacterId, childName, sessions, parentPinHash } =
+  const { selectedCharacterId, childName, sessions, parentPinHash, childAge } =
     useBuddy();
   const buddy = getCharacter(selectedCharacterId);
+  void childAge; // used in settings
 
   if (!hydrated) {
     return <div className="min-h-screen bg-gradient-to-b from-pink-50 to-rose-100" />;
@@ -21,7 +22,12 @@ export default function BuddyHome() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-pink-50 via-rose-50 to-purple-50 text-slate-800">
       <div className="mx-auto max-w-md px-5 pt-10 pb-24">
-        <h1 className="text-center font-black text-3xl text-rose-500 drop-shadow-sm">
+        {/* 設定ボタン（右上） */}
+        <div className="flex items-center justify-between">
+          <div />
+          <Link href="/settings" className="text-xl" aria-label="設定">⚙️</Link>
+        </div>
+        <h1 className="text-center font-black text-3xl text-rose-500 drop-shadow-sm mt-2">
           もこもこフレンド
         </h1>
         <p className="text-center text-sm text-slate-500 mt-1">
