@@ -362,11 +362,13 @@ export default function BuddyChatPage() {
             {/* マイクボタン — 下部固定 */}
             <div className="flex flex-col items-center gap-2 pb-2">
               <button
-                onPointerDown={startListening}
-                onPointerUp={stopListening}
-                onPointerLeave={stopListening}
+                onPointerDown={(e) => { e.preventDefault(); startListening(); }}
+                onPointerUp={(e) => { e.preventDefault(); stopListening(); }}
+                onPointerLeave={(e) => { e.preventDefault(); stopListening(); }}
+                onContextMenu={(e) => e.preventDefault()}
                 disabled={sending || isSpeaking}
-                className={`w-28 h-28 rounded-full shadow-2xl flex items-center justify-center text-5xl transition active:scale-95 disabled:opacity-40 ${
+                style={{ touchAction: "none", userSelect: "none", WebkitUserSelect: "none" } as React.CSSProperties}
+                className={`w-28 h-28 rounded-full shadow-2xl flex items-center justify-center text-5xl transition active:scale-95 disabled:opacity-40 select-none ${
                   isListening
                     ? "bg-red-400 animate-pulse"
                     : "bg-gradient-to-br from-rose-400 to-pink-400"
