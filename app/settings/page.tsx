@@ -17,9 +17,11 @@ export default function SettingsPage() {
   const {
     childName, setChildName,
     childAge, setChildAge,
+    agePromptShown, setAgePromptShown,
     fontSize, setFontSize,
     familyCode,
   } = useBuddy();
+  void agePromptShown;
 
   const [ageInput, setAgeInput] = useState(childAge ? String(childAge) : "");
   const [copied, setCopied] = useState(false);
@@ -43,6 +45,7 @@ export default function SettingsPage() {
   function applyAge() {
     const n = parseInt(ageInput, 10);
     setChildAge(isNaN(n) || n <= 0 ? null : Math.min(n, 18));
+    setAgePromptShown();
   }
 
   const ageLabel = childAge === null ? "未設定"
