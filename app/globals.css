@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background: linear-gradient(to bottom, #fff1f5, #ffe4ed);
+  min-height: 100vh;
+}
+
+@keyframes buddyBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.02); }
+}
