@@ -28,6 +28,7 @@ interface Actions {
   selectCharacter: (id: string) => void;
   setChildName: (name: string) => void;
   setChildAge: (age: number | null) => void;
+  setAgePromptShown: () => void;
   setFontSize: (size: "sm" | "md" | "lg") => void;
   setParentPin: (pin: string) => void;
   verifyParentPin: (pin: string) => boolean;
@@ -49,6 +50,7 @@ const initial: BuddyState = {
   selectedCharacterId: null,
   childName: "",
   childAge: null,
+  agePromptShown: false,
   fontSize: "md",
   familyCode: generateFamilyCode(),
   parentPinHash: null,
@@ -66,6 +68,8 @@ export const useBuddy = create<BuddyState & Actions>()(
       setChildName: (name) => set({ childName: name.slice(0, 20) }),
 
       setChildAge: (age) => set({ childAge: age }),
+
+      setAgePromptShown: () => set({ agePromptShown: true }),
 
       setFontSize: (size) => set({ fontSize: size }),
 

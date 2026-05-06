@@ -85,6 +85,8 @@ export interface BuddyState {
   selectedCharacterId: string | null;
   childName: string;
   childAge: number | null;
+  /** 初回年齢入力モーダルを表示したか (スキップも含め済みなら true) */
+  agePromptShown: boolean;
   fontSize: "sm" | "md" | "lg";
   familyCode: string;
   /** 保護者ダッシュボード PIN (4 桁数字) のハッシュ。未設定なら null。 */
