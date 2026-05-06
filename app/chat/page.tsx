@@ -128,6 +128,29 @@ export default function BuddyChatPage() {
     if (!character) return;
     setSending(true);
     try {
+      // 過去の完了済みセッション数と直近の要約を使って挨拶を変える
+      const pastSessions = sessions.filter((s) => s.endedAt && s.id !== sessionId);
+      const lastSummary = pastSessions[0]?.summary;
+      const isFirstEver = pastSessions.length === 0;
+
+      let systemNote: string;
+      if (isFirstEver) {
+        systemNote =
+          "(システム: 初めてのおしゃべり。やさしく自己紹介して、子どもの名前を聞き、今日の気分を1つだけ自然に聞いてあげて。)";
+      } else {
+        const lastContext = lastSummary
+          ? [
+              lastSummary.mood === "very_low" || lastSummary.mood === "low"
+                ? "前回すこし元気がなさそうだった" : null,
+              lastSummary.topics.length ? `前回は「${lastSummary.topics[0]}」の話をしてたよ` : null,
+            ].filter(Boolean).join("、")
+          : "";
+        systemNote =
+          `(システム: ${pastSessions.length}回目のおしゃべり。久しぶりに会う友達のように、あたたかく再会を喜んで。初めましてはNG。` +
+          (lastContext ? `${lastContext}。` : "") +
+          `今日の様子を1つだけ自然に聞いてあげて。)`;
+      }
+
       const r = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -141,25 +164,24 @@ export default function BuddyChatPage() {
           childName: childName || "",
           childAge: childAge ?? null,
           history: [],
-          userText:
-            "(システム: これは新しいセッションのスタート。やさしく短くあいさつして、今日の気分や様子を 1 つだけ自然に聞いてあげて。)",
+          userText: systemNote,
         }),
       });
-      if (r.ok) {
-        const j = (await r.json()) as { text?: string };
-        if (j.text) {
-          appendMessage(sessionId, { role: "buddy", text: j.text });
-          if (voiceMode) speak(j.text);
-          return;
-        }
-      }
-    } catch { /* fall through */ }
-    const fallback = childName
-      ? `${childName}、きょうはどんな1日だった？`
-      : "やっほー。きょうはどんな1日だった？";
-    appendMessage(sessionId, { role: "buddy", text: fallback });
-    if (voiceMode) speak(fallback);
-    setSending(false);
+      const text = r.ok ? ((await r.json()) as { text?: string }).text : null;
+      const reply = text ?? (childName
+        ? `${childName}、きょうはどんな1日だった？`
+        : "やっほー！きょうはどんな1日だった？");
+      appendMessage(sessionId, { role: "buddy", text: reply });
+      if (voiceMode) speak(reply);
+    } catch {
+      const fallback = childName
+        ? `${childName}、きょうはどんな1日だった？`
+        : "やっほー！きょうはどんな1日だった？";
+      appendMessage(sessionId, { role: "buddy", text: fallback });
+      if (voiceMode) speak(fallback);
+    } finally {
+      setSending(false);
+    }
   }
 
   async function sendText(text: string) {
